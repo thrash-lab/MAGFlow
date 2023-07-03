@@ -8,6 +8,9 @@ import param_controller2 as param_controller
 # determine output structure ()
 # make option to do just 100 percent assembly of all samples
 
+
+
+
 fastq_dir='/project/thrash_89/db/EAGER_metaG_for_ck/interleaved_metaG/qual_trim_after_interleaving/brett_cat'
 base_dir=config['output']['output_dir']
 
@@ -314,6 +317,7 @@ rule convert_bam_to_fastq:
 
  
 def iterate_subset(wcs):
+    # n represents percentage of output 
     n = wcs.percentage[:-7]
     # if output percentage is first subassembly percentage (which shouldn't exist)
     if n == config['subiterassembly_percentages'][0]:
@@ -323,8 +327,15 @@ def iterate_subset(wcs):
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
             if i == 1:
+                # if second subassembly percentage 
+
+                # orig percentage is first percentage in subassembly
                 orig_percentage = config['subiterassembly_percentages'][i-1]
+
+                # return from parallel
                 return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
+
+                # but what if job fails???
             else:
                 orig_percentage = config['subiterassembly_percentages'][i-1]
                 return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)

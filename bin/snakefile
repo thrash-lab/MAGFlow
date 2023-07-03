@@ -261,8 +261,19 @@ rule generate_consensus_bins_dastools:
 -o {output.dastools_dir}/{wildcards.sample} --write_bins --write_bin_evals \
 -t {threads}
         """
-
-rule evaluate_bins_checkm:
+#################
+#################
+#################
+#################
+#################
+#################
+#################
+#################
+#################
+#################
+#################
+#################
+checkpoint evaluate_bins_checkm:
     input:
         bins = base_dir +"{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins"
     output:
@@ -277,7 +288,14 @@ rule evaluate_bins_checkm:
     shell:
         """
         mkdir {output.checkm_dir} -p
-        checkm lineage_wf -x fa -t {threads} {input.bins} {output.checkm_dir} -f {output.checkm_table}"""
+
+        if [ -e "{input.bins}/*.fa" ]
+        then
+            echo "empty" > {output.checkm_table}
+        else
+            checkm lineage_wf -x fa -t {threads} {input.bins} {output.checkm_dir} -f {output.checkm_table}
+        fi
+        """
 
 
 # add subset percentage list
@@ -360,31 +378,46 @@ def iterate_subset(wcs):
 
     # set n to to the output percentage
     n = wcs.percentage[:-7]
+    # check 2 subassembly percentage
+    with checkpoints.evaluate_bins_checkm.get(sample=wildcards.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier=wildcards.modifier).output[1].open() as f:
+        # for example, if 1percent fails (yeilds empty in checkmtable), then goes from 5 ser to 10 par
+        if f.read().strip() == "empty":
+            # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+            # allow to go from par to ser
+            # if the second subassembly percentage
+            orig_percentage = config['subiterassembly_percentages'][-1]
+            return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
+        else: 
+            # if output percentage is the first subassembly percentage (which shouldn't exist) (this if statement should never flag)
+            if n == config['subiterassembly_percentages'][0]:
+                raise ValueError("bad snakemake")
+            
+            # if it is one of the other subassembly percentages
+            for i in range(len(config['subiterassembly_percentages'])):
+                if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
+                    if int(n) == 100:
+                    # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+                    # allow to go from par to ser
+                        # if the second subassembly percentage
+                        orig_percentage = config['subiterassembly_percentages'][-2]
+                        return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+                    elif i == 1:
+                    # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+                    # allow to go from par to ser
+                        # if the second subassembly percentage
+                        orig_percentage = config['subiterassembly_percentages'][i-1]
+                        return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
+                    elif int(n) != config['subiterassembly_percentages'][-1]:
+                    # for everything else except the last number
+                    # only go from ser to ser
+                        # otherwise, go from 
+                        orig_percentage = config['subiterassembly_percentages'][i-1]
+                        return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+                    
 
-    # if output percentage is the first subassembly percentage (which shouldn't exist) (this if statement should never flag)
-    if n == config['subiterassembly_percentages'][0]:
-        raise ValueError("bad snakemake")
-    
-    # if it is one of the other subassembly percentages
-    for i in range(len(config['subiterassembly_percentages'])):
-        if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
-            if int(n) == 100:
-            # for the second number (i.e. 5 out of 1,5,10,20,50,100)
-            # allow to go from par to ser
-                # if the second subassembly percentage
-                orig_percentage = config['subiterassembly_percentages'][-2]
-                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
-            elif i == 1:
-            # for the second number (i.e. 5 out of 1,5,10,20,50,100)
-            # allow to go from par to ser
-                # if the second subassembly percentage
-                orig_percentage = config['subiterassembly_percentages'][i-1]
-                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
-            elif int(n) != config['subiterassembly_percentages'][-1]:
-            # for everything else except the last number
-            # only go from ser to ser
-                orig_percentage = config['subiterassembly_percentages'][i-1]
-                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+            # but what about if checkm has a different output????????????????????
+            #https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution
+
     #return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, 100, 'percent', 'par', wcs.sample)
     
 
