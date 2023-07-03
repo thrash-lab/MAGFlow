@@ -309,7 +309,7 @@ rule subset_reads_par:
         reformat.sh in={input} out={output} samplerate=.{params.percentage} sampleseed=42
         """
 
-def determine_map_assembly_read_input(wcs)
+def determine_map_assembly_read_input(wcs):
     inputs = {}
     inputs['dastools_bin'] = base_dir + "{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins"
     inputs['trimmed_fq'] = base_dir + '{sample}_assembly/100percent_par/sickle_trimmed/{sample}_all_trimmed.fastq'
