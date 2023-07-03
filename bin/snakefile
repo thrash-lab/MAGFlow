@@ -17,10 +17,10 @@ def determine_inputs(wildcards):
         inputs['full'] = expand(base_dir + "{sample}_assembly/100percent_par/checkm/dastools/output_table.txt", sample=config['input'])
     if config['subiterassembly_percentages'] != 'none':
         inputs["subiterative_init"]=expand(base_dir + "{sample}_assembly/{subset}percent_par/checkm/dastools/output_table.txt", sample=config['input'], subset=config['subiterassembly_percentages'][0])
-        for i in range(0,len(config['subiterassembly_percentages'] - 2)):
-            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
+        for i in range(0, len(config['subiterassembly_percentages']) - 2):
+            with checkpoints.evaluate_bins_checkm.get(sample=wildcards.sample, subset="{}percent".format(config['subiterassembly_percentages'][i]), modifier='par').output[1].open() as f:
                 if not f.read().strip() == "empty":
-                   inputs["subiter_assembly_{}".format(config['subiterassembly_percentages'][i+1])] = base_dir + "{sample}_assembly/{subset}percent_ser/checkm/dastools/output_table.txt", sample=config['input'], subset=config['subiterassembly_percentages'][i+1])
+                   inputs["subiter_assembly_{}".format(config['subiterassembly_percentages'][i+1])] = expand(base_dir + "{sample}_assembly/{subset}percent_ser/checkm/dastools/output_table.txt", sample=config['input'], subset=config['subiterassembly_percentages'][i+1])
         inputs["subiter_assembly_full"]=expand(base_dir + "{sample}_assembly/{subset}percent_ser/checkm/dastools/output_table.txt", sample=config['input'], subset=config['subiterassembly_percentages'][-1])
     return inputs
 
