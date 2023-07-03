@@ -273,7 +273,7 @@ rule generate_consensus_bins_dastools:
 #################
 #################
 #################
-rule evaluate_bins_checkm:
+checkpoint evaluate_bins_checkm:
     input:
         bins = base_dir +"{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins"
     output:
