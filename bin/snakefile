@@ -273,7 +273,7 @@ rule generate_consensus_bins_dastools:
 #################
 #################
 #################
-checkpoint evaluate_bins_checkm:
+rule evaluate_bins_checkm:
     input:
         bins = base_dir +"{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins"
     output:
@@ -409,6 +409,7 @@ def iterate_subset(wcs):
                         # otherwise, go from 
                         orig_percentage = config['subiterassembly_percentages'][i-1]
                         return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+    
             # but what about if checkm has a different output????????????????????
             #https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution
 
