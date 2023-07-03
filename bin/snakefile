@@ -382,13 +382,15 @@ def iterate_subset(wcs):
 
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
+            # check if checkm returned empty or a file
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
-                if int(n) == config['subiterassembly_percentages'][i] and f.read().strip() == "empty":
+                if f.read().strip() == "empty":
+                    print("got here")
                     # for the second number (i.e. 5 out of 1,5,10,20,50,100)
                     # allow to go from par to ser
                     # if the second subassembly percentage
                     orig_percentage = config['subiterassembly_percentages'][i-1]
-                    return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % ("hooha" + base_dir, wcs.sample, orig_percentage, 'percently', 'par', wcs.sample)
+                    return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
             if int(n) == 100:
             # for the second number (i.e. 5 out of 1,5,10,20,50,100)
             # allow to go from par to ser
