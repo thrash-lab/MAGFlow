@@ -385,7 +385,6 @@ def iterate_subset(wcs):
             # check if checkm returned empty or a file
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
                 if f.read().strip() == "empty":
-                    print("got here")
                     # for the second number (i.e. 5 out of 1,5,10,20,50,100)
                     # allow to go from par to ser
                     # if the second subassembly percentage
