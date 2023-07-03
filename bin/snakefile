@@ -388,7 +388,7 @@ def iterate_subset(wcs):
                     # allow to go from par to ser
                     # if the second subassembly percentage
                     orig_percentage = config['subiterassembly_percentages'][i-1]
-                    return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'paragon', wcs.sample)
+                    return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % ("hooha" + base_dir, wcs.sample, orig_percentage, 'percently', 'par', wcs.sample)
             if int(n) == 100:
             # for the second number (i.e. 5 out of 1,5,10,20,50,100)
             # allow to go from par to ser
