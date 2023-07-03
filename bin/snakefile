@@ -381,34 +381,52 @@ def iterate_subset(wcs):
     # check 2 subassembly percentage
 
     for i in range(len(config['subiterassembly_percentages'])):
-
-        with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
-            if int(n) == config['subiterassembly_percentages'][i] and f.read().strip() == "empty":
-                # for the second number (i.e. 5 out of 1,5,10,20,50,100)
-                # allow to go from par to ser
+        if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
+            if int(n) == 100:
+            # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+            # allow to go from par to ser
+                # if the second subassembly percentage
+                orig_percentage = config['subiterassembly_percentages'][-2]
+                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+            elif i == 1:
+            # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+            # allow to go from par to ser
                 # if the second subassembly percentage
                 orig_percentage = config['subiterassembly_percentages'][i-1]
-                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'paragon', wcs.sample)
-            else:
-                if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
-                    if int(n) == 100:
-                    # for the second number (i.e. 5 out of 1,5,10,20,50,100)
-                    # allow to go from par to ser
-                        # if the second subassembly percentage
-                        orig_percentage = config['subiterassembly_percentages'][-2]
-                        return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
-                    elif i == 1:
-                    # for the second number (i.e. 5 out of 1,5,10,20,50,100)
-                    # allow to go from par to ser
-                        # if the second subassembly percentage
-                        orig_percentage = config['subiterassembly_percentages'][i-1]
-                        return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
-                    elif int(n) != config['subiterassembly_percentages'][-1]:
-                    # for everything else except the last number
-                    # only go from ser to ser
-                        # otherwise, go from 
-                        orig_percentage = config['subiterassembly_percentages'][i-1]
-                        return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
+            elif int(n) != config['subiterassembly_percentages'][-1]:
+            # for everything else except the last number
+            # only go from ser to ser
+                # otherwise, go from 
+                orig_percentage = config['subiterassembly_percentages'][i-1]
+                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+        # with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
+        #     if int(n) == config['subiterassembly_percentages'][i] and f.read().strip() == "empty":
+        #         # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+        #         # allow to go from par to ser
+        #         # if the second subassembly percentage
+        #         orig_percentage = config['subiterassembly_percentages'][i-1]
+        #         return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'paragon', wcs.sample)
+        #     else:
+        #         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
+        #             if int(n) == 100:
+        #             # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+        #             # allow to go from par to ser
+        #                 # if the second subassembly percentage
+        #                 orig_percentage = config['subiterassembly_percentages'][-2]
+        #                 return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+        #             elif i == 1:
+        #             # for the second number (i.e. 5 out of 1,5,10,20,50,100)
+        #             # allow to go from par to ser
+        #                 # if the second subassembly percentage
+        #                 orig_percentage = config['subiterassembly_percentages'][i-1]
+        #                 return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'par', wcs.sample)
+        #             elif int(n) != config['subiterassembly_percentages'][-1]:
+        #             # for everything else except the last number
+        #             # only go from ser to ser
+        #                 # otherwise, go from 
+        #                 orig_percentage = config['subiterassembly_percentages'][i-1]
+        #                 return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
     
             # but what about if checkm has a different output????????????????????
             #https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#data-dependent-conditional-execution
