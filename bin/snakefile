@@ -312,8 +312,8 @@ rule subset_reads_par:
 def determine_map_assembly_read_input(wcs):
 
     # set n to to the output percentage
-    n = wcs.percentage[:-7]
-    
+    n = wcs.subset[:-7]
+
     inputs = {}
     inputs['dastools_bin'] = base_dir + "{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins"
     inputs['trimmed_fq'] = base_dir + '{sample}_assembly/100percent_par/sickle_trimmed/{sample}_all_trimmed.fastq'
