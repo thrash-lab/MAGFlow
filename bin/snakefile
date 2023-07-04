@@ -347,8 +347,8 @@ rule map_subassembly_reads:
         bowtie2 -x {params.index} --interleaved {input.trimmed_fq} -S {output.sam} --threads {threads}
 
         # convert sam file into sorted and indexed bam file
-        # -f 4 discards mapped reads so that only unmapped reads are left
-        samtools view -f 4 -bS {output.sam} --threads {threads} > {output.raw_bam}
+        # -f 12 keeps reads where both read and mate are unmapped
+        samtools view -f 12 -bS {output.sam} --threads {threads} > {output.raw_bam}
         samtools sort {output.raw_bam} --threads {threads} > {output.bam}
         samtools index -@ {threads} {output.bam}"""
 
