@@ -334,7 +334,7 @@ rule map_subassembly_reads:
     resources:
         time = param_controller.calculate_map_subassembly_time,
         mem_mb = 125000, #125GB
-        partition = "main"
+        partition = "epyc-64"
     shell:
         """
         # check strigency of mapped tag (TODO)
