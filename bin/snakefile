@@ -309,13 +309,53 @@ rule subset_reads_par:
         reformat.sh in={input} out={output} samplerate=.{params.percentage} sampleseed=42
         """
 
+def map_subassembly_reads_input(wcs):
+    inputs = {}
+    inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
+    inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
+
+    # set n to to the output percentage
+    n = wcs.percentage[:-7]
+
+    for i in range(len(config['subiterassembly_percentages'])):
+        if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
+            if i == 0 and wcs.modifier == "par":
+            # for the first number, subset from 100 percent reads (par to par)
+                inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
+            elif i == 1 and wcs.modifier == "ser":
+            # for the second number, subset from 100 percent reads (par to ser)
+                orig_percentage = config['subiterassembly_percentages'][i-1]
+                inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+            elif int(n) != config['subiterassembly_percentages'][-1] and wcs.modifier == "ser":
+            # for everything else except the first and second
+            # only go from ser to ser
+                orig_percentage = config['subiterassembly_percentages'][i-1]
+                inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
+            # check if checkm returned empty or a file
+            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[1].open() as f:
+                if f.read().strip() == "empty" and wcs.modifier == "par":
+                    # if par subset returned no bins, then start subiterative assembly from next highest par subset
+                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
+            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
+                if f.read().strip() == "empty" and wcs.modifier == "ser":
+                    # if par subset two before returned no bins, then subiterative assembly will go from par to ser
+                    orig_percentage = config['subiterassembly_percentages'][i-1]
+                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+            if int(n) == 100:
+            # special case for last subiterative assembly (should not return anything)
+                inputs['trimmed_fq'] = 'none'
+
+    return inputs
+    
+
 # map assembly to reads
 ################
 rule map_subassembly_reads:
     input:
-        dastools_bin = base_dir + "{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins",
-        trimmed_fq = base_dir + '{sample}_assembly/100percent_par/sickle_trimmed/{sample}_all_trimmed.fastq',
-        checkm = base_dir + "{sample}_assembly/{subset}_{modifier}/checkm/dastools/output_table.txt"
+        unpack(map_subassembly_reads_input)
+        # dastools_bin = base_dir + "{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins",
+        # trimmed_fq = base_dir + '{sample}_assembly/100percent_par/sickle_trimmed/{sample}_all_trimmed.fastq',
+        # checkm = base_dir + "{sample}_assembly/{subset}_{modifier}/checkm/dastools/output_table.txt"
     output:
         cat_dastools_bins = base_dir +'{sample}_assembly/{subset}_{modifier}/subiterative_mapping/cat_consensus_bins.fa',
         bam = base_dir +'{sample}_assembly/{subset}_{modifier}/subiterative_mapping/{sample}.bam',
@@ -370,7 +410,6 @@ rule convert_bam_to_fastq:
 
  
 def iterate_subset(wcs):
-
     # set n to to the output percentage
     n = wcs.percentage[:-7]
     # check 2 subassembly percentage
