@@ -313,9 +313,9 @@ def map_subassembly_reads_input(wcs):
             # for the first number, subset from 100 percent reads (par to par)
                 inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
             elif i == 1 and wcs.modifier == "ser":
-            # for the second number, subset from 100 percent reads (par to ser)
+            # for the second number, subset from first subassembly (par to ser)
                 orig_percentage = config['subiterassembly_percentages'][i-1]
-                inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+                inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
             elif int(n) != config['subiterassembly_percentages'][-1] and wcs.modifier == "ser":
             # for everything else except the first and second
             # only go from ser to ser
@@ -330,7 +330,7 @@ def map_subassembly_reads_input(wcs):
                 if f.read().strip() == "empty" and wcs.modifier == "ser":
                     # if par subset two before returned no bins, then subiterative assembly will go from par to ser
                     orig_percentage = config['subiterassembly_percentages'][i-1]
-                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
