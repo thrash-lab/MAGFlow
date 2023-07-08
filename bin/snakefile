@@ -377,8 +377,6 @@ rule map_subassembly_reads:
         partition = "epyc-64"
     shell:
         """
-        # check strigency of mapped tag (TODO)
-
         # concatenate consensus/dastools bins and create index
         cat {input.dastools_bin}/*.fa > {output.cat_dastools_bins}
         bowtie2-build {output.cat_dastools_bins} {params.index} --threads {threads}
