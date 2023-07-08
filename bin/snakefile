@@ -315,7 +315,7 @@ def map_subassembly_reads_input(wcs):
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
     # set n to to the output percentage
-    n = wcs.percentage[:-7]
+    n = wcs.subset[:-7]
 
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
