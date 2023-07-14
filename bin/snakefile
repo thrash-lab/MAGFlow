@@ -367,8 +367,25 @@ rule map_subassembly_reads:
         partition = "epyc-64"
     shell:
         """
-        # concatenate consensus/dastools bins and create index
-        cat {input.dastools_bin}/*.fa > {output.cat_dastools_bins}
+        # loop through checkm output table, skipping first three lines
+        # concatenate consensus/dastools bins for 80.00 and up completeness bins
+        {
+        read; read; read;
+        while IFS="" read -r p || [ -n "$p" ] ; do
+            values=($p)
+            comp=${values[12]}
+            if [[ $p = \ * ]] 
+            then
+                if (( $(echo "$comp > 80.00" | bc -l)))
+                then
+                    cat "{input.dastools_bin}/${values[0]}.fa" > {output.cat_dastools_bins}
+                    echo ${values[0]};
+                fi
+            fi
+        done
+        } < {input.checkm}
+
+        # create index
         bowtie2-build {output.cat_dastools_bins} {params.index} --threads {threads}
 
         # align reads (see how many reads(full set) align to the consensus bins)
