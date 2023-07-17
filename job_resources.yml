@@ -11,12 +11,12 @@
       1_per: "0:15:00"
       5_per: "1:15:00"
       10_per: "5:00:00"
-      20_per: "6:00:00"
-      50_per: "8:00:00"
+      20_per: "8:00:00"
+      50_per: "10:00:00"
       100_per: "16:00:00"
     cpus-per-task: 64
     mem: 998000
-    partition: largemem
+    partition: meb_largemem
   bowtie2_map_reads: 
     ntasks: 1
     time: 

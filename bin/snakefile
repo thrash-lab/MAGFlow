@@ -467,3 +467,4 @@ rule subset_reads_ser:
         """
         reformat.sh in={input} out={output.trimmed} samplerate=.{params.percentage} sampleseed=42
         """
+
