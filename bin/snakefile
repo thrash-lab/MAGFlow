@@ -358,7 +358,7 @@ rule map_subassembly_reads:
         index_f4 = temp(base_dir +'{sample}_assembly/{subset}_{modifier}/subiterative_mapping/{sample}.4.bt2'),
         index_r1 = temp(base_dir +'{sample}_assembly/{subset}_{modifier}/subiterative_mapping/{sample}.rev.1.bt2'),
         index_r2 = temp(base_dir +'{sample}_assembly/{subset}_{modifier}/subiterative_mapping/{sample}.rev.2.bt2')
-    params: index = base_dir +'{sample}_assembly/{subset}_{modifier}//subiterative_mapping/{sample}'
+    params: index = base_dir +'{sample}_assembly/{subset}_{modifier}/subiterative_mapping/{sample}'
     conda: "../envs/read_mapping.yml"
     threads: 32
     resources:
@@ -367,9 +367,10 @@ rule map_subassembly_reads:
         partition = "epyc-64"
     shell:
         """
+        # NOTE: added double curly braces due to snakemake syntax in unix for loop
         # loop through checkm output table, skipping first three lines
         # concatenate consensus/dastools bins for 80.00 and up completeness bins
-        {
+        {{
         read; read; read;
         while IFS="" read -r p || [ -n "$p" ] ; do
             values=($p)
@@ -383,7 +384,7 @@ rule map_subassembly_reads:
                 fi
             fi
         done
-        } < {input.checkm}
+        }} < {input.checkm}
 
         # create index
         bowtie2-build {output.cat_dastools_bins} {params.index} --threads {threads}
