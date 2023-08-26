@@ -378,7 +378,7 @@ rule map_subassembly_reads:
             then
                 if (( $(echo "$comp > 80.00" | bc -l)))
                 then
-                    cat "{input.dastools_bin}/${values[0]}.fa" > {output.cat_dastools_bins}
+                    cat {input.dastools_bin}/"${values[0]}.fa" > {output.cat_dastools_bins}
                     echo ${values[0]};
                 fi
             fi
