@@ -374,10 +374,9 @@ rule map_subassembly_reads:
         read; read; read;
         while IFS="" read -r p || [ -n "$p" ] ; do
             values=($p)
-            comp=${{values[12]}}
             if [[ $p = \ * ]] 
             then
-                if (( $(echo "$comp > 80.00" | bc -l)))
+                if (( $(echo "${{values[12]}} > 80.00" | bc -l)))
                 then
                     cat {input.dastools_bin}/"${{values[0]}}.fa" > {output.cat_dastools_bins}
                     echo ${{values[0]}};
