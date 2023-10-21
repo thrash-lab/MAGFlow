@@ -261,7 +261,7 @@ checkpoint evaluate_bins_checkm:
         bins = base_dir +"{sample}_assembly/{subset}_{modifier}/binning/dastools/{sample}_DASTool_bins"
     output:
         checkm_dir = directory(base_dir +"{sample}_assembly/{subset}_{modifier}/checkm/dastools/"),
-        checkm_table = base_dir + "{sample}_assembly/{subset}_{modifier}/checkm/dastools/output_table.txt"
+        checkm_table = base_dir + "{sample}_assembly/{subset}_{modifier}/checkm/dastools/output_table.txt",
         checkm_table_thresholded = base_dir + "{sample}_assembly/{subset}_{modifier}/checkm/dastools/threshold_table.txt"
     conda: "../envs/checkm.yml"
     threads: 16
