@@ -368,9 +368,6 @@ def map_subassembly_reads_input(wcs):
             #         # if par subset two before returned no bins that meet threshold, then subiterative assembly will go from par to ser
             #         orig_percentage = config['subiterassembly_percentages'][i-1]
             #         inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
-            if int(n) == 100:
-            # special case for last subiterative assembly (should not return anything)
-                inputs['trimmed_fq'] = 'none'
 
     return inputs
     
