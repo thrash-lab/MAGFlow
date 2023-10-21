@@ -334,7 +334,7 @@ def map_subassembly_reads_input(wcs):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[2].open() as f:
                 #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
-                if i == 0 and wcs.modifier == "par" and f.read().strip() != "0":
+                if i == 0 and wcs.modifier == "ser" and f.read().strip() != "0":
                 # for the first number, subset from 100 percent reads (par to par)
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
                 elif wcs.modifier == "ser" and f.read().strip() != "0":
