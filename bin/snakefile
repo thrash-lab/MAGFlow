@@ -334,21 +334,20 @@ def map_subassembly_reads_input(wcs):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i]), modifier='par').output[2].open() as f:
                 #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
-                if i == 0 and wcs.modifier == "par" and f.read().strip() == "0":
+                if i == 0 and wcs.modifier == "par" and f.read().strip() != "0":
                 # for the first number, subset from 100 percent reads (par to par)
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
-                elif i == 1 and wcs.modifier == "ser" and f.read().strip() == "0":
+                elif i == 1 and wcs.modifier == "ser" and f.read().strip() != "0":
                 # for the second number, subset from first subassembly (par to ser)
                     orig_percentage = config['subiterassembly_percentages'][i-1]
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
-                elif int(n) != config['subiterassembly_percentages'][-1] and wcs.modifier == "ser" and f.read().strip() == "0":
+                elif int(n) != config['subiterassembly_percentages'][-1] and wcs.modifier == "ser" and f.read().strip() != "0":
                 # for everything else except the first and second
                 # only go from ser to ser
                     orig_percentage = config['subiterassembly_percentages'][i-1]
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
                 # check if checkm returned empty or a file
-            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[2].open() as f:
-                if f.read().strip() == "0" and wcs.modifier == "par":
+                elif f.read().strip() != "0" and wcs.modifier == "par":
                     # if par subset returned no bins that meet threshold, then start subiterative assembly from next highest par subset
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
             # with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[2].open() as f:
