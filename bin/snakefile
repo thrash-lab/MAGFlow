@@ -262,6 +262,7 @@ checkpoint evaluate_bins_checkm:
     output:
         checkm_dir = directory(base_dir +"{sample}_assembly/{subset}_{modifier}/checkm/dastools/"),
         checkm_table = base_dir + "{sample}_assembly/{subset}_{modifier}/checkm/dastools/output_table.txt"
+        checkm_table_thresholded = base_dir + "{sample}_assembly/{subset}_{modifier}/checkm/dastools/threshold_table.txt"
     conda: "../envs/checkm.yml"
     threads: 16
     resources:
@@ -278,6 +279,27 @@ checkpoint evaluate_bins_checkm:
         else
             checkm lineage_wf -x fa -t {threads} {input.bins} {output.checkm_dir} -f {output.checkm_table}
         fi
+
+        #initialize count variable
+        count=0
+
+        # NOTE: added double curly braces due to snakemake syntax in unix for loop
+        # loop through checkm output table, skipping first three lines
+        # count number of bins that meet threshold
+        {{
+        read; read; read;
+        while IFS="" read -r p || [ -n "$p" ] ; do
+            values=($p)
+            if [[ $p = \ * ]] 
+            then
+                if (( $(echo "${{values[12]}} > 80.00" | bc -l)))
+                then
+                    count=$((count + 1))
+                fi
+            fi
+        done
+        }} < {output.checkm_table}
+        cat count > {output.checkm_table_thresholded}
         """
 
 
@@ -307,8 +329,10 @@ def map_subassembly_reads_input(wcs):
     # set n to to the output percentage
     n = wcs.subset[:-7]
 
+    # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
+            #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
             if i == 0 and wcs.modifier == "par":
             # for the first number, subset from 100 percent reads (par to par)
                 inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
@@ -322,13 +346,13 @@ def map_subassembly_reads_input(wcs):
                 orig_percentage = config['subiterassembly_percentages'][i-1]
                 inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
             # check if checkm returned empty or a file
-            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[1].open() as f:
-                if f.read().strip() == "empty" and wcs.modifier == "par":
-                    # if par subset returned no bins, then start subiterative assembly from next highest par subset
+            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[2].open() as f:
+                if f.read().strip() == "0" and wcs.modifier == "par":
+                    # if par subset returned no bins that meet threshold, then start subiterative assembly from next highest par subset
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
-            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
-                if f.read().strip() == "empty" and wcs.modifier == "ser":
-                    # if par subset two before returned no bins, then subiterative assembly will go from par to ser
+            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[2].open() as f:
+                if f.read().strip() == "0" and wcs.modifier == "ser":
+                    # if par subset two before returned no bins that meet threshold, then subiterative assembly will go from par to ser
                     orig_percentage = config['subiterassembly_percentages'][i-1]
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
             if int(n) == 100:
