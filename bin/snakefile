@@ -294,12 +294,12 @@ checkpoint evaluate_bins_checkm:
             then
                 if (( $(echo "${{values[12]}} > 80.00" | bc -l)))
                 then
-                    count=$((count + 1))
+                    count=$(($count + 1))
                 fi
             fi
         done
         }} < {output.checkm_table}
-        cat count > {output.checkm_table_thresholded}
+        echo $count > {output.checkm_table_thresholded}
         """
 
 
