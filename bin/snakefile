@@ -340,7 +340,7 @@ def map_subassembly_reads_input(wcs):
                 elif wcs.modifier == "ser" and f.read().strip() != "0":
                 # for the second number, subset from first subassembly (par to ser)
                     orig_percentage = config['subiterassembly_percentages'][i-1]
-                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
                 elif int(n) != config['subiterassembly_percentages'][-1] and wcs.modifier == "ser" and f.read().strip() != "0":
                 # for everything else except the first and second
                 # only go from ser to ser
