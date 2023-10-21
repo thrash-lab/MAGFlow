@@ -359,15 +359,9 @@ def map_subassembly_reads_input(wcs):
                 # only go from ser to ser
                     orig_percentage = config['subiterassembly_percentages'][i-1]
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
-                # check if checkm returned empty or a file
-                # elif f.read().strip() != "0" and wcs.modifier == "par":
-                #     # if par subset returned no bins that meet threshold, then start subiterative assembly from next highest par subset
-                #     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, 100, 'par', wcs.sample)
-            # with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[2].open() as f:
-            #     if f.read().strip() == "0" and wcs.modifier == "ser":
-            #         # if par subset two before returned no bins that meet threshold, then subiterative assembly will go from par to ser
-            #         orig_percentage = config['subiterassembly_percentages'][i-1]
-            #         inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+            if int(n) == 100:
+            # special case for last subiterative assembly (should not return anything)
+                inputs['trimmed_fq'] = 'none'
 
     return inputs
     
