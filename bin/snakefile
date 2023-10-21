@@ -332,7 +332,7 @@ def map_subassembly_reads_input(wcs):
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
-            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[2].open() as f:
+            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i]), modifier='par').output[2].open() as f:
                 #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
                 if i == 0 and wcs.modifier == "par" and f.read().strip() == "0":
                 # for the first number, subset from 100 percent reads (par to par)
