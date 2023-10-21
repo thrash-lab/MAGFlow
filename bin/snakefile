@@ -28,6 +28,7 @@ ruleorder: subset_reads_ser > subset_reads_par
 ruleorder: subset_reads_ser > evaluate_bins_checkm
 ruleorder: subset_reads_ser > metaspades_assembly
 ruleorder: convert_bam_to_fastq > evaluate_bins_checkm
+ruleorder: map_subassembly_reads> convert_bam_to_fastq
 
 ruleorder: generate_consensus_bins_dastools > subset_reads_par
 ruleorder: generate_consensus_bins_dastools > subset_reads_ser
@@ -345,7 +346,7 @@ def map_subassembly_reads_input(wcs):
 
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[2].open() as f:
                 #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
-                if i == (start_idx+1) and wcs.modifier == "ser":
+                if i == (start_idx+1) and wcs.modifier == "par":
                 # for the first number, subset from 100 percent reads (par to par)
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, start_idx, 'par', wcs.sample)
                 # going from ser to ser (e.g. continuation )
@@ -457,8 +458,8 @@ def iterate_subset(wcs):
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
             # check if checkm returned empty or a file
-            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[1].open() as f:
-                if f.read().strip() == "empty":
+            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-2]), modifier='par').output[2].open() as f:
+                if f.read().strip() == "0":
                     # for the second number (i.e. 5 out of 1,5,10,20,50,100)
                     # allow to go from par to ser
                     # if the second subassembly percentage
