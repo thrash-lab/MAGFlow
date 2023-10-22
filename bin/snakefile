@@ -349,7 +349,7 @@ def map_subassembly_reads_input(wcs):
                 # for the first number, subset from 100 percent reads (par to par)
                     inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
                 # going from ser to ser (e.g. continuation )
-                elif wcs.modifier == "ser" and i < start_idx:
+                elif wcs.modifier == "ser" and i > start_idx:
                 # for the second number, subset from first subassembly (par to ser)
                     orig_percentage = config['subiterassembly_percentages'][i-1]
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
