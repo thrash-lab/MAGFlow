@@ -353,7 +353,7 @@ def map_subassembly_reads_input(wcs):
     #checkpoint
 
     #default 
-    inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
+    # inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
 
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
