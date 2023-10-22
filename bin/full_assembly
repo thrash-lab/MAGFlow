@@ -118,11 +118,11 @@ def main():
         full = "False"
     
     if args.sub and args.subiter:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=ref_args['subiter'])
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=ref_args['subiter'], threshold=ref_args['thershold'])
     elif args.sub:
         create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=False)
     elif args.subiter:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=ref_args['subiter'])
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=ref_args['subiter'], threshold=ref_args['thershold'])
     else:
         create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=False)
     dry_run_addon = ""
@@ -156,6 +156,8 @@ def add_arguments():
                    'e.g. 5,10,25,50', type=str, required=False)
     p.add_argument('--subiter', help='percentage of reads to keep for subtractive iterative assemblies. Enter as comma delimited list of percentages \n'
                    'e.g. 5,10,25,50', type=str, required=False)
+    p.add_argument('--threshold', help='treshold completeness for bins in subiterative assembly to be excluded from subsequent iteration. \n'
+                   'default: 80', type=str, required=False)
     p.add_argument('--no-full', help='do not assemble and bin for 100 percent of the reads', default=False, action='store_true', dest='no_full')
 
     #TODO: add additional options to specify subassemblies and iterative subtractive assembly
@@ -188,6 +190,11 @@ def preprocess_arguments(args):
             raise Exception("iterative subtractive assembly percentages are not in range [1,100]")
         print(sub_per)
         ref_args['subiter'] = sub_per
+
+        if args.threshold: 
+            ref_args['threshold'] = args.threshold
+        else: 
+            ref_args['threshold'] = "80"
 
     # make sure -i flag points to dir or csv file. make sure that suffix flag is indicated if -i points to a dir
 
@@ -225,7 +232,7 @@ def preprocess_arguments(args):
     return ref_args
         
 
-def create_config_file(full, filename, args, samples, filenames, resources, subper=False, subiterper=False):
+def create_config_file(full, filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=False):
 
     pairs = []
     for i in range(len(samples)):
@@ -244,6 +251,9 @@ def create_config_file(full, filename, args, samples, filenames, resources, subp
         subiterper_str = "subiterassembly_percentages:"
         for iterper in subiterper:
             subiterper_str = subiterper_str + "\n      - " + str(iterper)
+        if threshold:
+            subiterper_str = subiterper_str + "\n    threshold: " + threshold
+            
     else:
         subiterper_str = "subiterassembly_percentages: none"
 
@@ -258,6 +268,7 @@ def create_config_file(full, filename, args, samples, filenames, resources, subp
     {4}
     slurm_resources: 
 {5}
+    {6}
     """.format(full, "\n      ".join(pairs), args.o, subper_str, subiterper_str, resources)
 
     with open(filename, 'w') as f:
