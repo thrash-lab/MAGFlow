@@ -489,7 +489,7 @@ rule subset_reads_ser:
         iterate_subset
     output: 
         # e.g. 10_ser
-        trimmed = base_dir + '{sample}_assembly/{percentage}_ser/{th}_threshold/sickle_trimmed/{sample}_all_trimmed.fastq'.format(th=threshold)
+        trimmed = base_dir + '{sample}_assembly/{percentage}_ser/{th}_threshold/sickle_trimmed/{sample}_all_trimmed.fastq'
     conda: "../envs/bbmap.yml"
     resources:
         time = param_controller.subset_reads_ser,
