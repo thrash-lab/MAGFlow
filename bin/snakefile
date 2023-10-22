@@ -338,7 +338,8 @@ def map_subassembly_reads_input(wcs):
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
     # set n to to the output percentage
-    n = wcs.subset[:3]
+    n = wcs.percentage.split('percent')[0]
+    # n = wcs.subset[:3]
 
     # determine where to go from par to ser (i.e. earliest thresholded file that isn't "0")
     # start_idx is earliest file that isn't 0 (has files that meet threshold)
