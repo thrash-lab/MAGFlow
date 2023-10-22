@@ -268,7 +268,6 @@ def create_config_file(full, filename, args, samples, filenames, resources, subp
     {4}
     slurm_resources: 
 {5}
-    {6}
     """.format(full, "\n      ".join(pairs), args.o, subper_str, subiterper_str, resources)
 
     with open(filename, 'w') as f:
