@@ -356,10 +356,10 @@ def map_subassembly_reads_input(wcs):
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
-            if int(n) == int(config['subiterassembly_percentages'][start_idx + 1]):
+            if int(n) == 10:
                 # input: /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq
                 # for the second number, subset from first subassembly (par to ser)
-                orig_percentage = config['subiterassembly_percentages'][start_idx + 1]
+                orig_percentage = 5
                 #LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq'
                 inputs['trimmed_fq'] = '/project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq'
                 inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
