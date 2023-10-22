@@ -16,16 +16,16 @@ def determine_inputs(wildcards):
         inputs["subassemblies"]=expand(base_dir + "{sample}_assembly/{subset}percent_par/checkm/dastools/output_table.txt", sample=config['input'], subset=config['subassembly_percentages'])
     if config['full']:
         inputs['full'] = expand(base_dir + "{sample}_assembly/100percent_par/checkm/dastools/output_table.txt", sample=config['input'])
-    if config['subiterassembly_percentages'] != 'none':
-        inputs["subiter_assembly"]=expand(base_dir + "{sample}_assembly/{subset}percent_ser/checkm/dastools/output_table.txt", 
-                                   sample=config['input'], 
-                                   subset=config['subiterassembly_percentages'][-1],
-                                   threshold=config['threshold'])
     # if config['subiterassembly_percentages'] != 'none':
-    #     inputs["subiter_assembly"]=expand(base_dir + "{sample}_assembly/{subset}percent_ser/{threshold}_th/checkm/dastools/output_table.txt", 
+    #     inputs["subiter_assembly"]=expand(base_dir + "{sample}_assembly/{subset}percent_ser/checkm/dastools/output_table.txt", 
     #                                sample=config['input'], 
     #                                subset=config['subiterassembly_percentages'][-1],
     #                                threshold=config['threshold'])
+    if config['subiterassembly_percentages'] != 'none':
+        inputs["subiter_assembly"]=expand(base_dir + "{sample}_assembly/{subset}percent_ser/{threshold}_threshold/checkm/dastools/output_table.txt", 
+                                   sample=config['input'], 
+                                   subset=config['subiterassembly_percentages'][-1],
+                                   threshold=config['threshold'])
     return inputs
 
 rule all:
@@ -352,21 +352,20 @@ def map_subassembly_reads_input(wcs):
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
-            with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[2].open() as f:
-                #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
-                if i == (start_idx) and wcs.modifier == "par":
-                # for the first number, subset from 100 percent reads (par to par)
-                    inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
-                # going from ser to ser (e.g. continuation )
-                elif wcs.modifier == "ser" and i > start_idx + 1:
+            #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
+            if i == (start_idx) and wcs.modifier == "par":
+            # for the first number, subset from 100 percent reads (par to par)
+                inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
+            # going from ser to ser (e.g. continuation )
+            elif wcs.modifier == 'ser/{threshold}_threshold/'.format(threshold) and i > start_idx + 1:
+            # for the second number, subset from first subassembly (par to ser)
+                orig_percentage = config['subiterassembly_percentages'][i-1]
+                inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser/{threshold}_threshold/'.format(threshold), wcs.sample)
+            elif wcs.modifier == 'ser/{threshold}_threshold/'.format(threshold) and i == start_idx + 1:
+                # input: /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq
                 # for the second number, subset from first subassembly (par to ser)
-                    orig_percentage = config['subiterassembly_percentages'][i-1]
-                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
-                elif wcs.modifier == "ser" and i == start_idx + 1:
-                    # input: /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq
-                    # for the second number, subset from first subassembly (par to ser)
-                    orig_percentage = config['subiterassembly_percentages'][i-1]
-                    inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+                orig_percentage = config['subiterassembly_percentages'][i-1]
+                inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
@@ -469,7 +468,7 @@ def iterate_subset(wcs):
             # allow to go from par to ser
                 # if the second subassembly percentage
                 orig_percentage = config['subiterassembly_percentages'][-2]
-                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser/{threshold}_threshold/'.format(threshold), wcs.sample)
             elif i == 1:
             # for the second number (i.e. 5 out of 1,5,10,20,50,100)
             # allow to go from par to ser
@@ -481,7 +480,7 @@ def iterate_subset(wcs):
             # only go from ser to ser
                 # otherwise, go from 
                 orig_percentage = config['subiterassembly_percentages'][i-1]
-                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser', wcs.sample)
+                return '%s%s_assembly/%d%s_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'percent', 'ser/{threshold}_threshold/'.format(threshold), wcs.sample)
     
 
 rule subset_reads_ser:
@@ -490,7 +489,7 @@ rule subset_reads_ser:
         iterate_subset
     output: 
         # e.g. 10_ser
-        trimmed = base_dir + '{sample}_assembly/{percentage}_ser/sickle_trimmed/{sample}_all_trimmed.fastq'
+        trimmed = base_dir + '{sample}_assembly/{percentage}_ser/{th}_threshold/sickle_trimmed/{sample}_all_trimmed.fastq'.format(th=threshold)
     conda: "../envs/bbmap.yml"
     resources:
         time = param_controller.subset_reads_ser,
