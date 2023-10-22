@@ -345,7 +345,7 @@ def map_subassembly_reads_input(wcs):
     # start_idx is earliest file that isn't 0 (has files that meet threshold)
     start_idx = 0
     # count backwards
-    for j in range(len(config['subiterassembly_percentages'])-1, 0, -1):
+    for j in range(len(config['subiterassembly_percentages'])-1, -1, -1):
         with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
             if f.read().strip() != "0":
                 start_idx = j
