@@ -339,7 +339,7 @@ def map_subassembly_reads_input(wcs):
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
                 if f.read().strip() != "0":
                     start_idx = len(config['subiterassembly_percentages']) - j - 1
-
+    #checkpoint
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
