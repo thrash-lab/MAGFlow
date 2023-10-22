@@ -118,11 +118,11 @@ def main():
         full = "False"
     
     if args.sub and args.subiter:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=ref_args['subiter'], threshold=ref_args['thershold'])
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=ref_args['subiter'], threshold=ref_args['threshold'])
     elif args.sub:
         create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=False)
     elif args.subiter:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=ref_args['subiter'], threshold=ref_args['thershold'])
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=ref_args['subiter'], threshold=ref_args['threshold'])
     else:
         create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=False)
     dry_run_addon = ""
