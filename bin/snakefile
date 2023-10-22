@@ -334,11 +334,11 @@ def map_subassembly_reads_input(wcs):
     # start_idx is earliest file that isn't 0 (has files that meet threshold)
     start_idx = len(config['subiterassembly_percentages']) - 1
     # count backwards
-    for j in range(len(config['subiterassembly_percentages'])):
-        if int(n) == config['subiterassembly_percentages'][len(config['subiterassembly_percentages']) - j - 1] or int(n) == 100:
+    for j in range(len(config['subiterassembly_percentages'])-1, 0, -1):
+        if int(n) == config['subiterassembly_percentages'][j]:
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
                 if f.read().strip() != "0":
-                    start_idx = len(config['subiterassembly_percentages']) - j - 1
+                    start_idx = j
     #checkpoint
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
@@ -349,7 +349,7 @@ def map_subassembly_reads_input(wcs):
                 # for the first number, subset from 100 percent reads (par to par)
                     inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
                 # going from ser to ser (e.g. continuation )
-                elif wcs.modifier == "ser" and i > 1:
+                elif wcs.modifier == "ser" and i > j:
                 # for the second number, subset from first subassembly (par to ser)
                     orig_percentage = config['subiterassembly_percentages'][i-1]
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
