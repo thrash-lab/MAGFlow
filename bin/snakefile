@@ -366,9 +366,9 @@ def map_subassembly_reads_input(wcs):
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
-            elif int(n) == 10 and wcs.modifier == "par":
+            elif int(n) == 20:
                 # for the second number, subset from first subassembly (par to ser)
-                    orig_percentage = 5
+                    orig_percentage = 10
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
 
     return inputs
