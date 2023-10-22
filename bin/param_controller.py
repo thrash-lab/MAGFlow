@@ -45,7 +45,8 @@ def calculate_sickle_trim_full_partition(wildcards):
 #
 def calculate_m_assembly_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['metaspades_assembly']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['metaspades_assembly']['time'][str("{0}_per".format(key))]
 
 def calculate_m_assembly_mem(wildcards):
     config = get_yaml_fields()
@@ -57,27 +58,33 @@ def calculate_m_assembly_partition(wildcards):
 
 def calculate_bowtie2_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['bowtie2_map_reads']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['bowtie2_map_reads']['time'][str("{0}_per".format(key))]
 
 def calculate_g_depth_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['generate_depth_files']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['generate_depth_files']['time'][str("{0}_per".format(key))]
 
 def calculate_metabat2_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['bin_metabat2']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['bin_metabat2']['time'][str("{0}_per".format(key))]
 
 def calculate_concoct_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['bin_concoct']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['bin_concoct']['time'][str("{0}_per".format(key))]
 
 def calculate_maxbin_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['bin_maxbin2']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['bin_maxbin2']['time'][str("{0}_per".format(key))]
 
 def calculate_dastools_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['generate_consensus_bins_dastools']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['generate_consensus_bins_dastools']['time'][str("{0}_per".format(key))]
 
 def calculate_checkm_time(wildcards):
     config = get_yaml_fields()
@@ -85,16 +92,20 @@ def calculate_checkm_time(wildcards):
 
 def calculate_subset_par_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['subset_reads_par']['time'][str("{0}_per".format(wildcards.subset))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['subset_reads_par']['time'][str("{0}_per".format(key))]
 
 def calculate_map_subassembly_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['map_subassembly_reads']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['map_subassembly_reads']['time'][str("{0}_per".format(key))]
 
 def calculate_convert_bam_time(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['convert_bam_to_fastq']['time'][str("{0}_per".format(wildcards.subset[:-7]))]
+    key = wildcards.subset.split('percent')[0]
+    return config['slurm_resources']['convert_bam_to_fastq']['time'][str("{0}_per".format(key))]
 
 def subset_reads_ser(wildcards):
     config = get_yaml_fields()
-    return config['slurm_resources']['subset_reads_ser']['time'][str("{0}_per".format(wildcards.percentage[:-7]))]
+    key = wildcards.percentage.split('percent')[0]
+    return config['slurm_resources']['subset_reads_ser']['time'][str("{0}_per".format(key))]
