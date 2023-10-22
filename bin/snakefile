@@ -330,7 +330,8 @@ def map_subassembly_reads_input(wcs):
     # set n to to the output percentage
     n = wcs.subset[:-7]
 
-     # start_idx is earliest file that isn't 0 (has files that meet threshold)
+    # determine where to go from par to ser (i.e. earliest thresholded file that isn't "0")
+    # start_idx is earliest file that isn't 0 (has files that meet threshold)
     start_idx = len(config['subiterassembly_percentages']) - 1
     # count backwards
     for j in range(len(config['subiterassembly_percentages'])):
@@ -342,13 +343,10 @@ def map_subassembly_reads_input(wcs):
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
-            # determine where to go from par to ser (i.e. earliest thresholded file that isn't "0")
-
             with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][i-1]), modifier='par').output[2].open() as f:
                 #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
                 if i == (start_idx) and wcs.modifier == "par":
                 # for the first number, subset from 100 percent reads (par to par)
-                    # /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/100percent_par/sickle_trimmed/LKB_V4_S16_all_trimmed.fastq
                     inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
                 # going from ser to ser (e.g. continuation )
                 elif wcs.modifier == "ser" and i > start_idx + 1:
@@ -356,24 +354,13 @@ def map_subassembly_reads_input(wcs):
                     orig_percentage = config['subiterassembly_percentages'][i-1]
                     inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'ser', wcs.sample)
                 elif i == (start_idx + 1) and wcs.modifier == "ser":
-                # input: /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq
                 # for the second number, subset from first subassembly (par to ser)
                     orig_percentage = config['subiterassembly_percentages'][i-1]
-                    #LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq'
                     inputs['trimmed_fq'] = '/project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq'
-                    inputs['trimmed_fq'] = '%s%s_asembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
-                    # inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
-            # if int(n) == 10:
-            #     # input: /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq
-            #     # for the second number, subset from first subassembly (par to ser)
-            #         orig_percentage = 5
-            #         #LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq'
-            #         inputs['trimmed_fq'] = '/project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/LKB_V4_S16_assembly/5percent_par/subiterative_mapping/LKB_V4_S16.fastq'
-            #         inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
-            #         # inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+
             
 
     return inputs
