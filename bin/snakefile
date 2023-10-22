@@ -349,7 +349,12 @@ def map_subassembly_reads_input(wcs):
         with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
             if f.read().strip() != "0":
                 start_idx = j
+
     #checkpoint
+
+    #default 
+    inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
+    
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
@@ -370,6 +375,7 @@ def map_subassembly_reads_input(wcs):
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
+    
     return inputs
     
 
