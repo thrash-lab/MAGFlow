@@ -252,10 +252,10 @@ def create_config_file(full, filename, args, samples, filenames, resources, subp
         for iterper in subiterper:
             subiterper_str = subiterper_str + "\n      - " + str(iterper)
         if threshold:
-            subiterper_str = subiterper_str + "\n    threshold: " + threshold
+            subiterper_str = subiterper_str + "\n    threshold: " + str(threshold)
             
     else:
-        subiterper_str = "subiterassembly_percentages: none" + "\n    threshold: " + threshold
+        subiterper_str = "subiterassembly_percentages: none" + "\n    threshold: " + str(threshold)
 
     # string to write to config file
     yml_lines = """
