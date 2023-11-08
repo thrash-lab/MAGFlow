@@ -232,7 +232,7 @@ def preprocess_arguments(args):
     return ref_args
         
 
-def create_config_file(full, filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=False):
+def create_config_file(full, filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=80):
 
     pairs = []
     for i in range(len(samples)):
