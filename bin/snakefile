@@ -287,30 +287,31 @@ checkpoint evaluate_bins_checkm:
         if [ -e "{input.bins}/*.fa" ]
         then
             echo "empty" > {output.checkm_table}
+            echo "0" > {output.checkm_table_thresholded}
         else
             checkm lineage_wf -x fa -t {threads} {input.bins} {output.checkm_dir} -f {output.checkm_table}
-        fi
 
-        #initialize count variable
-        count=0
+            #initialize count variable
+            count=0
 
-        # NOTE: added double curly braces due to snakemake syntax in unix for loop
-        # loop through checkm output table, skipping first three lines
-        # count number of bins that meet threshold
-        {{
-        read; read; read;
-        while IFS="" read -r p || [ -n "$p" ] ; do
-            values=($p)
-            if [[ $p = \ * ]] 
-            then
-                if (( $(echo "${{values[12]}} > {params.th}" | bc -l)))
+            # NOTE: added double curly braces due to snakemake syntax in unix for loop
+            # loop through checkm output table, skipping first three lines
+            # count number of bins that meet threshold
+            {{
+            read; read; read;
+            while IFS="" read -r p || [ -n "$p" ] ; do
+                values=($p)
+                if [[ $p = \ * ]] 
                 then
-                    count=$(($count + 1))
+                    if (( $(echo "${{values[12]}} > {params.th}" | bc -l)))
+                    then
+                        count=$(($count + 1))
+                    fi
                 fi
-            fi
-        done
-        }} < {output.checkm_table}
-        echo $count > {output.checkm_table_thresholded}
+            done
+            }} < {output.checkm_table}
+            echo $count > {output.checkm_table_thresholded}
+        fi
         """
 
 
