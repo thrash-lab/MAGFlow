@@ -120,11 +120,11 @@ def main():
     if args.sub and args.subiter:
         create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=ref_args['subiter'], threshold=ref_args['threshold'])
     elif args.sub:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=False)
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=False, threshold=80)
     elif args.subiter:
         create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=ref_args['subiter'], threshold=ref_args['threshold'])
     else:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=False)
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=80)
     dry_run_addon = ""
     if args.n:
         dry_run_addon = "-n"
