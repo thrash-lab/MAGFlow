@@ -3,7 +3,7 @@
     time: 00:20:00
     cpus-per-task: 16
     mem: 125000
-    partition: main
+    partition: epyc-64
   metaspades_assembly:
     ntasks: 1
     nodes: 1
@@ -28,7 +28,7 @@
       100_per: "1:00:00"
     cpus-per-task: 32
     mem: 125000
-    partition: main
+    partition: epyc-64
   generate_depth_files:
     ntasks: 1
     time:
@@ -40,7 +40,7 @@
       100_per: "1:00:00"
     cpus-per-task: 16
     mem: 125000
-    partition: main
+    partition: epyc-64
   bin_metabat2:
     ntasks: 1
     time:
@@ -52,7 +52,7 @@
       100_per: "1:00:00"
     cpus-per-task: 16
     mem: 125000
-    partition: main
+    partition:epyc-64
   bin_concoct:
     ntasks: 1
     time:
@@ -94,7 +94,7 @@
     time: 0:25:00
     cpus-per-task: 16
     mem: 50000
-    partition: main
+    partition: epyc-64
   subset_reads_par:
     ntasks: 1
     time:
@@ -106,7 +106,7 @@
       100_per: "2:30:00"
     cpus-per-task: 16
     mem: 50000
-    partition: main
+    partition: epyc-64
   map_subassembly_reads:
     ntasks: 1
     time:
