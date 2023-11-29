@@ -325,7 +325,7 @@ rule subset_reads_par:
     resources:
         time = param_controller.calculate_subset_par_time,
         mem_mb = 120000, #120GB
-        partition = "main"
+        partition = "epyc-64"
     params: 
         percentage = lambda wc: "{:02d}".format(int(wc.subset)) 
     conda: "../envs/bbmap.yml"
@@ -361,7 +361,7 @@ def map_subassembly_reads_input(wcs):
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
             #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
-            if i == (start_idx) and wcs.modifier == "par":
+            if i == (start_idx):
             # for the first number, subset from 100 percent reads (par to par)
                 inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
             # going from ser to ser (e.g. continuation )
@@ -376,6 +376,8 @@ def map_subassembly_reads_input(wcs):
                 # for the second number, subset from first subassembly (par to ser)
                 orig_percentage = config['subiterassembly_percentages'][i-1]
                 inputs['trimmed_fq'] = '%s%s_assembly/%dpercent_%s/subiterative_mapping/%s.fastq' % (base_dir, wcs.sample, orig_percentage, 'par', wcs.sample)
+            else:
+                inputs['trimmed_fq'] = 'none'
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
