@@ -337,15 +337,18 @@ rule subset_reads_par:
 def map_subassembly_reads_input(wcs):
     inputs = {}
 
-    # sample=CJ_V2_S8, subset=50percent_ser/80, modifier=threshold
+    # wildcards: sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     # CJ_V4_S10_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V4_S10_DASTool_bins
 
 
     #/project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/CJ_V4_S10_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V4_S10_DASTool_bins
     #/project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/CJ_V8_S13_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V8_S13_DASTool_bins
 
+    # /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/CJ_V2_S8_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V2_S8_DASTool_bins
+    # 50percent_ser/80 CJ_V2_S8
+
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
-    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V2_S8"):
+    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
         print('%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample))
         print(wcs.subset, wcs.sample)
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
