@@ -345,7 +345,7 @@ def map_subassembly_reads_input(wcs):
     #/project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/CJ_V8_S13_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V8_S13_DASTool_bins
 
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
-    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V2_S8")
+    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V2_S8"):
         print('%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample))
         print(wcs.subset, wcs.sample)
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
