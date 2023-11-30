@@ -401,7 +401,7 @@ def map_subassembly_reads_input(wcs):
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
 
-    print(inputs)
+    print(wcs)
     # wildcards: sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
         print("----")
