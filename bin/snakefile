@@ -348,10 +348,10 @@ def map_subassembly_reads_input(wcs):
     # 50percent_ser/80 CJ_V2_S8
 
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
-    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
-        print('%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample))
-        print(wcs.subset, wcs.sample)
-    inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
+    # if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
+    #     print('%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample))
+    #     print(wcs.subset, wcs.sample)
+    # inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
     # set n to to the output percentage
     n = wcs.subset.split('percent')[0]
@@ -396,6 +396,14 @@ def map_subassembly_reads_input(wcs):
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
     
+    if not inputs['trimmed_fq']: 
+        print("\n\n\n\n\n")
+        print("-----------")
+        print("-----------")
+        print("-----------")
+        print("-----------")
+        print("\n\n\n\n\n")
+        print("\n\n\n\n\n")
     return inputs
     
 
