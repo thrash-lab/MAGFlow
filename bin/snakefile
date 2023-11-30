@@ -412,6 +412,7 @@ def map_subassembly_reads_input(wcs):
         print("-----------")
         print("\n\n\n\n\n")
         print("\n\n\n\n\n")
+    print(inputs)
     return inputs
     
 
