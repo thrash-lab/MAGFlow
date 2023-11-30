@@ -340,6 +340,7 @@ def map_subassembly_reads_input(wcs):
     #wildcards: sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     # CJ_V4_S10_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V4_S10_DASTool_bins
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
+    inputs['dastools_bin'] = 'none'
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
     # set n to to the output percentage
@@ -354,11 +355,7 @@ def map_subassembly_reads_input(wcs):
         with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
             if f.read().strip() != "0":
                 start_idx = j
-
     #checkpoint
-
-    #default 
-    # inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
 
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
