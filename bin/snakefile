@@ -347,10 +347,10 @@ def map_subassembly_reads_input(wcs):
     # /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/CJ_V2_S8_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V2_S8_DASTool_bins
     # 50percent_ser/80 CJ_V2_S8
 
+    #sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
-    # if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
-    #     print('%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample))
-    #     print(wcs.subset, wcs.sample)
+    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
+        print(inputs)
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
     # set n to to the output percentage
@@ -395,24 +395,6 @@ def map_subassembly_reads_input(wcs):
             if int(n) == 100:
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
-    
-    if not inputs['trimmed_fq']: 
-        print("\n\n\n\n\n")
-        print("-----------")
-        print("-----------")
-        print("trim")
-        print("-----------")
-        print("\n\n\n\n\n")
-        print("\n\n\n\n\n")
-    if not inputs['checkm']: 
-        print("\n\n\n\n\n")
-        print("-----------")
-        print("-----------")
-        print("checkm")
-        print("-----------")
-        print("\n\n\n\n\n")
-        print("\n\n\n\n\n")
-    print(inputs)
     return inputs
     
 
