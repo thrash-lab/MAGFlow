@@ -349,9 +349,11 @@ def map_subassembly_reads_input(wcs):
 
     if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
         print("----")
+        print(wcs)
+        print(inputs)
         print("----")
         print("----")
-        
+
     #sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
@@ -403,6 +405,8 @@ def map_subassembly_reads_input(wcs):
     # wildcards: sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
         print("----")
+        print(wcs)
+        (print(inputs))
         print("----")
         print("----")
         
