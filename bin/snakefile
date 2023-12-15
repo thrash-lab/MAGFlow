@@ -416,6 +416,8 @@ def map_subassembly_reads_input(wcs):
     # wildcards: sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
         print("----")
+        print("jkljdfa;")
+        print("test3", inputs['dastools_bin'])
         print(wcs)
         (print(inputs))
         print("----")
