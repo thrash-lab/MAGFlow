@@ -384,6 +384,8 @@ def map_subassembly_reads_input(wcs):
                 start_idx = j
     #checkpoint
 
+
+    print("got here")
     print(config['subiterassembly_percentages'])
     print(len(config['subiterassembly_percentages']))
     # loop through percentages
