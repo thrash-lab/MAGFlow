@@ -388,6 +388,7 @@ def map_subassembly_reads_input(wcs):
                 print("got here2")
                 start_idx = j
                 print("last one", start_idx)
+        print("last check", j)
     #checkpoint
     print(start_idx)
 
