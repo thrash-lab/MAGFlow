@@ -382,10 +382,12 @@ def map_subassembly_reads_input(wcs):
     start_idx = 0
     # count backwards
     for j in range(len(config['subiterassembly_percentages'])-1, -1, -1):
+        print(j)
         with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
             if f.read().strip() != "0":
                 print("got here2")
                 start_idx = j
+                print(start_idx)
     #checkpoint
 
 
