@@ -383,6 +383,7 @@ def map_subassembly_reads_input(wcs):
 
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
+        print("test3", inputs['dastools_bin'])
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
             #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
             if i < (start_idx):
