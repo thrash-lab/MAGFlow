@@ -374,6 +374,9 @@ def map_subassembly_reads_input(wcs):
     n = wcs.subset.split('percent')[0]
     # n = wcs.subset[:3]
 
+
+    print("got here")
+
     # determine where to go from par to ser (i.e. earliest thresholded file that isn't "0")
     # start_idx is earliest file that isn't 0 (has files that meet threshold)
     start_idx = 0
@@ -381,11 +384,12 @@ def map_subassembly_reads_input(wcs):
     for j in range(len(config['subiterassembly_percentages'])-1, -1, -1):
         with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
             if f.read().strip() != "0":
+                print("got here2")
                 start_idx = j
     #checkpoint
 
 
-    print("got here")
+    print("got here3")
     print(config['subiterassembly_percentages'])
     print(len(config['subiterassembly_percentages']))
     # loop through percentages
