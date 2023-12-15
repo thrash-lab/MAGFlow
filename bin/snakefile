@@ -381,6 +381,8 @@ def map_subassembly_reads_input(wcs):
                 start_idx = j
     #checkpoint
 
+    print(config['subiterassembly_percentages'])
+    print(len(config['subiterassembly_percentages']))
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         print("test3", inputs['dastools_bin'])
