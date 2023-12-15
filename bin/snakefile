@@ -346,56 +346,26 @@ def map_subassembly_reads_input(wcs):
 
     # /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/CJ_V2_S8_assembly/50percent_ser/80_threshold/binning/dastools/CJ_V2_S8_DASTool_bins
     # 50percent_ser/80 CJ_V2_S8
-
-    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
-        print("----")
-        print(wcs)
-        print("dastools_bin: ", '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)) 
-        print("checkm: ", '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)) 
-        print("----")
-        print("----")
-
-    print(config['subiterassembly_percentages'])
-    print(len(config['subiterassembly_percentages']))
-
     #sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
-    print("test1", inputs['dastools_bin'])
-
-
-    inputs['dastools_bin'] = '{0}{1}_assembly/{2}_{3}/binning/dastools/{4}_DASTool_bins'.format(base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
-    print("test2", inputs['dastools_bin'])
-
-    inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
     # set n to to the output percentage
     n = wcs.subset.split('percent')[0]
     # n = wcs.subset[:3]
 
 
-    print("got here")
-
     # determine where to go from par to ser (i.e. earliest thresholded file that isn't "0")
     # start_idx is earliest file that isn't 0 (has files that meet threshold)
     start_idx = 0
     # count backwards
     for j in range(len(config['subiterassembly_percentages'])-1, -1, -1):
-        print(j)
-        print("sample: {0}, subset: {1}".format(wcs.sample, "{}percent".format(config['subiterassembly_percentages'][j], modifier='par')))
         with checkpoints.evaluate_bins_checkm.get(sample=wcs.sample, subset="{}percent".format(config['subiterassembly_percentages'][j]), modifier='par').output[2].open() as f:
             if f.read().strip() != "0":
-                print("got here2")
                 start_idx = j
-                print("last one", start_idx)
-        print("last check", j)
     #checkpoint
-    print(start_idx)
 
-    print("got here3")
-    print(config['subiterassembly_percentages'])
-    print(len(config['subiterassembly_percentages']))
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         print("test3", inputs['dastools_bin'])
@@ -426,18 +396,6 @@ def map_subassembly_reads_input(wcs):
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
 
-    print("test3", inputs['dastools_bin'])
-
-    print(wcs)
-    # wildcards: sample=CJ_V4_S10, subset=50percent_ser/80, modifier=threshold
-    if (wcs.subset=="50percent_ser/80" and wcs.sample=="CJ_V4_S10"):
-        print("----")
-        print("jkljdfa;")
-        print("test3", inputs['dastools_bin'])
-        print(wcs)
-        (print(inputs))
-        print("----")
-        print("----")
         
     return inputs
     
