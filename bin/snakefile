@@ -359,6 +359,14 @@ def map_subassembly_reads_input(wcs):
     inputs['dastools_bin'] = '%s%s_assembly/%s_%s/binning/dastools/%s_DASTool_bins' % (base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
     inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
 
+    print(inputs['dastools_bin'])
+
+
+    inputs['dastools_bin'] = '{0}{1}_assembly/{2}_{3}/binning/dastools/{4}_DASTool_bins'.format(base_dir, wcs.sample, wcs.subset, wcs.modifier, wcs.sample)
+    inputs['dastools_bin']
+    
+    inputs['checkm'] = '%s%s_assembly/%s_%s/checkm/dastools/output_table.txt' % (base_dir, wcs.sample, wcs.subset, wcs.modifier)
+
     # set n to to the output percentage
     n = wcs.subset.split('percent')[0]
     # n = wcs.subset[:3]
