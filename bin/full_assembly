@@ -197,10 +197,10 @@ def preprocess_arguments(args):
         else: 
             ref_args['threshold'] = "80"
 
-        if args.seed: 
-            ref_args['seed'] = args.seed
-        else: 
-            ref_args['seed'] = "42"
+    if args.seed: 
+        ref_args['seed'] = args.seed
+    else: 
+        ref_args['seed'] = "42"
 
     # make sure -i flag points to dir or csv file. make sure that suffix flag is indicated if -i points to a dir
 
