@@ -118,13 +118,13 @@ def main():
         full = "False"
     
     if args.sub and args.subiter:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=ref_args['subiter'], threshold=ref_args['threshold'])
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=ref_args['subiter'], threshold=ref_args['threshold'], seed=ref_args['seed'])
     elif args.sub:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=False, threshold=80)
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=ref_args['sub'], subiterper=False, threshold=80, seed=ref_args['seed'])
     elif args.subiter:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=ref_args['subiter'], threshold=ref_args['threshold'])
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=ref_args['subiter'], threshold=ref_args['threshold'], seed=ref_args['seed'])
     else:
-        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=80)
+        create_config_file(full, config_filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=80, seed=ref_args['seed'])
     dry_run_addon = ""
     if args.n:
         dry_run_addon = "-n"
@@ -154,6 +154,7 @@ def add_arguments():
     p.add_argument('--dag', help='create DAG pdf. Enter path to output dag.pdf', default=False, type=str, required=False)
     p.add_argument('--sub', help='percentage of reads to keep for subassemblies. Enter as comma delimited list of percentages \n'
                    'e.g. 5,10,25,50', type=str, required=False)
+    p.add_argument('--seed', help='random seed for bbmap subset reads e.g. 42', type=str, required=False)
     p.add_argument('--subiter', help='percentage of reads to keep for subtractive iterative assemblies. Enter as comma delimited list of percentages \n'
                    'e.g. 5,10,25,50', type=str, required=False)
     p.add_argument('--threshold', help='treshold completeness for bins in subiterative assembly to be excluded from subsequent iteration. \n'
@@ -196,6 +197,11 @@ def preprocess_arguments(args):
         else: 
             ref_args['threshold'] = "80"
 
+        if args.seed: 
+            ref_args['seed'] = args.seed
+        else: 
+            ref_args['seed'] = "42"
+
     # make sure -i flag points to dir or csv file. make sure that suffix flag is indicated if -i points to a dir
 
     if args.slurm_config:
@@ -232,7 +238,7 @@ def preprocess_arguments(args):
     return ref_args
         
 
-def create_config_file(full, filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=80):
+def create_config_file(full, filename, args, samples, filenames, resources, subper=False, subiterper=False, threshold=80, seed="42"):
 
     pairs = []
     for i in range(len(samples)):
@@ -268,7 +274,8 @@ def create_config_file(full, filename, args, samples, filenames, resources, subp
     {4}
     slurm_resources: 
 {5}
-    """.format(full, "\n      ".join(pairs), args.o, subper_str, subiterper_str, resources)
+    seed: {6}
+    """.format(full, "\n      ".join(pairs), args.o, subper_str, subiterper_str, resources, seed)
 
     with open(filename, 'w') as f:
         f.writelines(yml_lines)

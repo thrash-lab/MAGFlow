@@ -9,6 +9,7 @@ import param_controller
 fastq_dir='/project/thrash_89/db/EAGER_metaG_for_ck/interleaved_metaG/qual_trim_after_interleaving/brett_cat'
 base_dir=config['output']['output_dir']
 threshold=config['threshold']
+seed=config['seed']
 
 def determine_inputs(wildcards):
     inputs = {}
@@ -327,11 +328,12 @@ rule subset_reads_par:
         mem_mb = 120000, #120GB
         partition = "epyc-64"
     params: 
-        percentage = lambda wc: "{:02d}".format(int(wc.subset)) 
+        percentage = lambda wc: "{:02d}".format(int(wc.subset)),
+        r_seed = seed
     conda: "../envs/bbmap.yml"
     shell:
         """
-        reformat.sh in={input} out={output} samplerate=.{params.percentage} sampleseed=42
+        reformat.sh in={input} out={output} samplerate=.{params.percentage} sampleseed={params.r_seed}
         """
 
 def map_subassembly_reads_input(wcs):
