@@ -372,9 +372,9 @@ def map_subassembly_reads_input(wcs):
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
             #orig percentage is percentage before output (i.e. 20 --> 10, 50 --> 20)
-            if i < (start_idx):
-            # for the first number, subset from 100 percent reads (par to par)
-                inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
+            # if i < (start_idx):
+            # # for the first number, subset from 100 percent reads (par to par)
+            #     inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
             elif i == (start_idx):
             # for the first number, subset from 100 percent reads (par to par)
                 inputs['trimmed_fq'] = '%s%s_assembly/100percent_par/sickle_trimmed/%s_all_trimmed.fastq' % (base_dir, wcs.sample, wcs.sample)
