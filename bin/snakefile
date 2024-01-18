@@ -399,6 +399,7 @@ def map_subassembly_reads_input(wcs):
     
     print(n)
     print(start_idx)
+    print(config['subiterassembly_percentages'][j])
     print(inputs['trimmed_fq'] )
 
         
