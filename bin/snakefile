@@ -368,7 +368,7 @@ def map_subassembly_reads_input(wcs):
                 start_idx = j
     #checkpoint
 
-    start_idx = start_idx + 2
+    start_idx = start_idx -1
     # loop through percentages
     for i in range(len(config['subiterassembly_percentages'])):
         if int(n) == config['subiterassembly_percentages'][i] or int(n) == 100:
