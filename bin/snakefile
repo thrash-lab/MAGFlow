@@ -397,6 +397,7 @@ def map_subassembly_reads_input(wcs):
             # special case for last subiterative assembly (should not return anything)
                 inputs['trimmed_fq'] = 'none'
     
+    print(n)
     print(start_idx)
     print(inputs['trimmed_fq'] )
 
