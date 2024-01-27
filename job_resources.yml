@@ -15,7 +15,7 @@
       50_per: "10:00:00"
       100_per: "16:00:00"
     cpus-per-task: 64
-    mem: 449000
+    mem: 998000
     partition: meb_largemem
   bowtie2_map_reads: 
     ntasks: 1
