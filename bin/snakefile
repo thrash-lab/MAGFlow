@@ -35,9 +35,7 @@ rule all:
 
 ruleorder: 
 ruleorder: metaspades_assembly > subset_reads_par
-ruleorder: subset_reads_ser > subset_reads_par
-ruleorder: subset_reads_ser > evaluate_bins_checkm
-ruleorder: subset_reads_ser > metaspades_assembly
+ruleorder: subset_reads_par > subset_reads_ser
 ruleorder: convert_bam_to_fastq > evaluate_bins_checkm
 ruleorder: map_subassembly_reads> convert_bam_to_fastq
 
@@ -66,6 +64,17 @@ ruleorder: sickle_trim_full > bin_concoct
 ruleorder: sickle_trim_full > bowtie2_map_reads
 ruleorder: sickle_trim_full > generate_consensus_bins_dastools
 ruleorder: generate_consensus_bins_dastools > sickle_trim_full
+
+ruleorder: subset_reads_par > subset_reads_ser
+ruleorder: map_subassembly_reads > subset_reads_ser
+ruleorder: convert_bam_to_fastq > subset_reads_ser
+ruleorder: metaspades_assembly > subset_reads_ser
+ruleorder: bin_metabat2 > subset_reads_ser
+ruleorder: bin_concoct > subset_reads_ser
+ruleorder: bowtie2_map_reads > subset_reads_ser
+ruleorder: generate_consensus_bins_dastools > subset_reads_ser
+
+
 
 # this sickle trim rule acts as a starting point (trims the 100% raw fastq fil)
 rule sickle_trim_full:
