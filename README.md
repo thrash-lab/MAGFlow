@@ -73,7 +73,6 @@ full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-re
 ```
 
 ## References
-The program uses tools from the following sources
 
 Joshi NA, Fass JN. (2011). Sickle: A sliding-window, adaptive, quality-based trimming tool for FastQ files 
 (Version 1.33) [Software].  Available at https://github.com/najoshi/sickle.
