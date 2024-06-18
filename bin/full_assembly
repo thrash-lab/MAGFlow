@@ -7,102 +7,6 @@ import subprocess
 import csv
 import os
 
-#  TODO: creating framework to adjust time (and resources) for subiterative assembly (here)
-# http://bluegenes.github.io/Using-Snakemake_Profiles/
-
-
-"""what do I have and where I am going. 
-
-I have a pipeline that works on a single sample. it takes a fastq file as input and creates all the specified subdirs and files
-within a given dir.
-
-What do I want: two fold objectives: I want to create a pipeline that is generalizable to all samples or a dataset. I would leverage 
-argparse to do this and let argparse create a specified config file that snakemake ultimately uses. (implement argparse, create
-config file from given data, update snakemake to work with config file) (Use dry run!)
-
-The other objective is to create a pipeline that does subassemblies and iterative subtractive assemblies. I believe this can be 
-accomplished with two new rules. One rule will be subsetting reads. another rule will be mapping reads. perhaps another rule
-will be subsetting only unmapped reads.
-
-: set up argparse (done)
-: config file (done)
-: make config file hold resource req for each rule (testing)
-    check config file is writen correctly
-        make sample data/files (done)
-
-        cmds
-            conda activate snakemake
-            full_assembly -i /Users/connerkojima/thrash/assembly_snakemake/test_data/samples/ -s _all.fastq -o /Users/connerkojima/thrash/assembly_snakemake/test_data/output_dir/ --resource-req /Users/connerkojima/thrash/assembly_snakemake/job_resources.yml -n --sub 1,5,10,20,50
-            full_assembly -i /Users/connerkojima/thrash/assembly_snakemake/test_data/samples/samples.csv -o /Users/connerkojima/thrash/assembly_snakemake/test_data/output_dir/ --resource-req /Users/connerkojima/thrash/assembly_snakemake/job_resources.yml -n --sub 1,5,10,20,50
-            full_assembly -i /Users/connerkojima/thrash/assembly_snakemake/test_data/samples/samples.csv -o /Users/connerkojima/thrash/assembly_snakemake/test_data/output_dir/ --resource-req /Users/connerkojima/thrash/assembly_snakemake/job_resources.yml -n --sub 10,20 --subiter 15,50
-
-: sub assemblies (done)
-    : subsetting rule: (done)
-    : mapping rule: (done)
-: subiterative subassemblies (flow) (Done)
-: subsetting rules: (done) (done)
-    : creating framework to adjust time (and resources) for subiterative assembly (here)
-
-Done: make an 100% assembly only rule
-    Done: Make seperate subassembly and subtractive iterative assembly command line args
-    Done: make config file update according to subassembly and subtractive iterative assembly
-    Done: have rules in snakefile all change acccording to config file
-
-execute command in discovery hpc: for thrash metaGs
-/project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual_all.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml --dag "dag_all_samples_just_full.pdf"
-/project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml --sub 1,5,10,20,50 --subiter 1,5,10,20,50,100 --dag "dag_all_samples_all.pdf"
-/project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml -n
-/project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml --additional-args="--rerun-incomplete --rerun-triggers mtime"
-/project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml --additional-args="--rerun-incomplete --rerun-triggers mtime -n"
-full_assembly -i /Users/connerkojima/thrash/assembly_snakemake/test_data/samples/ -s _all.fastq -o /Users/connerkojima/thrash/assembly_snakemake/test_data/output_dir/ --resource-req /Users/connerkojima/thrash/assembly_snakemake/job_resources2.yml --dag "dag_test.pdf" --sub 1
-
-test command on fake file (dry run only)
-/project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/samples2.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml -n
-
-
-# Command to rerun in v4 (Nov 6, 2022)
-Done: /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual2.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml --no-full --sub 5 --additional-args="--rerun-incomplete --rerun-triggers mtime -n"
-
-# command to run after 100 (Nov 10, 2022)
-Done: /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual2.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml --no-full --sub 10 --additional-args="--rerun-incomplete --rerun-triggers mtime -n"
-
-test command locally
-full_assembly -i /Users/connerkojima/thrash/assembly_snakemake/test_data/samples/ -s _all.fastq -o /Users/connerkojima/thrash/assembly_snakemake/test_data/output_dir/ --resource-req /Users/connerkojima/thrash/assembly_snakemake/job_resources.yml -n --sub 1 --no-full
-
-test command local full, sub, subiter on one file
-full_assembly -i /Users/connerkojima/thrash/assembly_snakemake/test_data/samples/samples.csv -o /Users/connerkojima/thrash/assembly_snakemake/test_data/output_dir/ --resource-req /Users/connerkojima/thrash/assembly_snakemake/job_resources.yml --sub 1,5,10,20,50 --subiter 1,5,10,20,50,100 --dag "dag_one_sample_all_approaches.pdf"
-
-TODO: add Tbon_V2_S22 and LKB_V7_S19 back to list
-Done: make slurm resource config from assembly show up in snakemake config
-
-TODO: Make resource params adjust according to [par, ser] and [percentage_reads]
-
-#test subassebmly 1command on hpc
-/project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/bin/full_assembly -i /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/test_data/samples/EAGER_actual2.csv -o /project/thrash_89/db/EAGER_metaG_for_ck/pipeline_assemblies/ --resource-req /project/thrash_89/db/EAGER_metaG_for_ck/scripts/assembly_snakemake/job_resources.yml --no-full --sub 5 --additional-args="-n"
-
-Focus in on one sample 
-Make config file hold resource values to use e.g. 
-
-Subset 
-1: params for each rule
-10: params for each rule
-15: params for each rule
-25: params for each rule
-50: params for each rule
-100: params for each rule
-
-Have snakemake access these values for the rule by looking at percent wildcard (would have to use some sort of function)
-
-Would need to adjust full_assembly file to account for additional optionally in command line
-
-Worst case scenario.
-Do top level control of snakemake. Run snakemake on each iteration file and rewrite resource params for each iteration
-
-TODO: testing subassembly:
-TODO: testing subiterative subassembly:
-
-afterthought: job groups
-"""
 
 def main():
     args = add_arguments()
@@ -157,7 +61,7 @@ def add_arguments():
     p.add_argument('--seed', help='random seed for bbmap subset reads e.g. 42', type=str, required=False)
     p.add_argument('--subiter', help='percentage of reads to keep for subtractive iterative assemblies. Enter as comma delimited list of percentages \n'
                    'e.g. 5,10,25,50', type=str, required=False)
-    p.add_argument('--threshold', help='treshold completeness for bins in subiterative assembly to be excluded from subsequent iteration. \n'
+    p.add_argument('--threshold', help='threshold completeness for bins in subiterative assembly to be excluded from subsequent iteration. \n'
                    'default: 80', type=str, required=False)
     p.add_argument('--no-full', help='do not assemble and bin for 100 percent of the reads', default=False, action='store_true', dest='no_full')
 
