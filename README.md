@@ -14,8 +14,8 @@ A streamlined program designed to facilitate the binning and assembly of metagen
 ## Installation
 ```
 mkdir assembly_workflow
-git clone https://github.com/kojiconner/assembly-workflow.git
 cd assembly_workflow
+git clone https://github.com/kojiconner/assembly-workflow.git
 ```
 
 ## Usage
