@@ -1,3 +1,0 @@
-ModuleNotFoundErrorin line 6 of /Users/connerkojima/thrash/assembly_EAGER/bin/snakefile:
-No module named 'src'
-  File "/Users/connerkojima/thrash/assembly_EAGER/bin/snakefile", line 6, in <module>

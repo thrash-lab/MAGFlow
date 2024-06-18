@@ -1,3 +1,0 @@
-NameErrorin line 26 of /Users/connerkojima/thrash/assembly_EAGER/bin/snakefile:
-name 'sample' is not defined
-  File "/Users/connerkojima/thrash/assembly_EAGER/bin/snakefile", line 26, in <module>

@@ -1,3 +1,0 @@
-KeyError in line 10 of /Users/connerkojima/thrash/assembly_EAGER/bin/snakefile:
-'subassembly percentages'
-  File "/Users/connerkojima/thrash/assembly_EAGER/bin/snakefile", line 10, in <module>

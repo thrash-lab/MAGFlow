@@ -1,3 +1,0 @@
-ModuleNotFoundErrorin line 7 of /Users/connerkojima/thrash/assembly_snakemake/bin/snakefile:
-No module named 'param_controller'
-  File "/Users/connerkojima/thrash/assembly_snakemake/bin/snakefile", line 7, in <module>

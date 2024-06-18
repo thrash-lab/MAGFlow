@@ -1,3 +1,0 @@
-Building DAG of jobs...
-WorkflowErrorin line 391 of /Users/connerkojima/thrash/assembly_snakemake/bin/snakefile:
-Function did not return str or list of str.

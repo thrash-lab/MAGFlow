@@ -1,3 +1,0 @@
-CreateRuleException in line 305 of /Users/connerkojima/thrash/assembly_EAGER/bin/snakefile:
-The name subset_reads_ser is already used by another rule
-  File "/Users/connerkojima/thrash/assembly_EAGER/bin/snakefile", line 305, in <module>

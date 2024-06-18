@@ -4,9 +4,6 @@ import yaml
 import sys
 import param_controller
 
-# TODO make 100% subiter generalizable to all samples (with expand) deploy and test
-
-fastq_dir='/project/thrash_89/db/EAGER_metaG_for_ck/interleaved_metaG/qual_trim_after_interleaving/brett_cat'
 base_dir=config['output']['output_dir']
 threshold=config['threshold']
 seed=config['seed']
