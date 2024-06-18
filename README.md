@@ -8,7 +8,6 @@ A streamlined program designed to facilitate the binning and assembly of metagen
 3) Arguments
 4) Examples
 5) References
-6) License
 
 
 ## Installation
@@ -96,15 +95,3 @@ Bushnell, B. (2014). BBTools software packag. e.
 Langmead, B., & Salzberg, S. L. (2012). Fast gapped-read alignment with Bowtie 2. Nature methods, 9(4), 357-359.
 
 Li, H., Handsaker, B., Wysoker, A., Fennell, T., Ruan, J., Homer, N., ... & 1000 Genome Project Data Processing Subgroup. (2009). The sequence alignment/map format and SAMtools. bioinformatics, 25(16), 2078-2079.
-
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-
-
-
-
-
-
