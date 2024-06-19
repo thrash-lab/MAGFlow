@@ -1,4 +1,4 @@
-# Assembly Workflow
+# Assembly and Binning Workflow
 A streamlined program designed to facilitate the binning and assembly of metagenomes. The only supported job scheduler is SLURM. The program trims metagenomic reads, performs assembly with metaSPADES, bins contigs with metabat2, concoct, and maxbin2, generates consensus bins with DASTools, and evaluates bins with CheckM. 
 
 
