@@ -5,9 +5,10 @@ A streamlined program designed to facilitate the binning and assembly of metagen
 ## Table of Contents
 1) Installation
 2) Usage
-3) Arguments
-4) Examples
-5) References
+3) Options
+4) Arguments
+5) Examples
+6) References
 
 
 ## Installation
@@ -19,11 +20,27 @@ git clone https://github.com/thrash-lab/MAGFlow.git
 
 ## Usage
 
-To run the Assembly Workflow, use the following command:
+To run the Assembly Workflow, use the following steps:
+
+1. create a Conda Env with Snakemake v7.8.5
 ```
-cd assembly_workflow/MAGFlow/bin
+conda create -n MAGFlow_env
+conda activate MAGFlow_env
+conda install snakemake=7.8.5
+```
+2. Create or modify job resources file
+```
+# create your own file or use the job_resources_template.yml file as a template e.g.
+cp MAGFlow/job_resources_template.yml job_resources.yml
+vim job_resources.yml
+```
+3. Call MAGFlow
+```
+cd MAGFlow/bin
 MAGFlow -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> 
 ```
+
+## Options
 -i: Path to input interleaved fastq files. If the path is a directory with fastq files, use the -s flag. Alternatively, you can provide a CSV file with sample names in the first column and paths to interleaved sample fastq files in the second column. (required)
 
 -o: Path to output directory. If the directory does not exist, it will be created. (required)
