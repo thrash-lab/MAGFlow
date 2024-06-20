@@ -14,15 +14,15 @@ A streamlined program designed to facilitate the binning and assembly of metagen
 ```
 mkdir assembly_workflow
 cd assembly_workflow
-git clone https://github.com/kojiconner/assembly-workflow.git
+git clone https://github.com/thrash-lab/MAGFlow.git
 ```
 
 ## Usage
 
 To run the Assembly Workflow, use the following command:
 ```
-cd assembly_workflow/assembly_snakemake/bin
-full_assembly-i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> 
+cd assembly_workflow/MAGFlow/bin
+full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> 
 ```
 -i: Path to input interleaved fastq files. If the path is a directory with fastq files, use the -s flag. Alternatively, you can provide a CSV file with sample names in the first column and paths to interleaved sample fastq files in the second column. (required)
 
