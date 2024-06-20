@@ -22,7 +22,7 @@ git clone https://github.com/thrash-lab/MAGFlow.git
 To run the Assembly Workflow, use the following command:
 ```
 cd assembly_workflow/MAGFlow/bin
-full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> 
+MAGFlow -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> 
 ```
 -i: Path to input interleaved fastq files. If the path is a directory with fastq files, use the -s flag. Alternatively, you can provide a CSV file with sample names in the first column and paths to interleaved sample fastq files in the second column. (required)
 
@@ -54,22 +54,22 @@ full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-re
 
 Full assembly 
 ```
-full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml>
+MAGFlow -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml>
 ```
 
 Full and sub assembly 
 ```
-full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> --sub 1,5,10,20,50 
+MAGFlow -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> --sub 1,5,10,20,50 
 ```
 
 Only sub assembly 
 ```
-full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> --sub 1,5,10,20,50 --no-full
+MAGFlow -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> --sub 1,5,10,20,50 --no-full
 ```
 
 Full assembly, sub assembly, and subtractive iterative assembly  
 ```
-full_assembly -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> --sub 1,5,10,20,50 --subiter 1,5,10,20,50,100
+MAGFlow -i <path_to_csv_file> -o <path_to_output_directory>  --resource-req <path_to_job_resources_yml> --sub 1,5,10,20,50 --subiter 1,5,10,20,50,100
 ```
 
 ## References
